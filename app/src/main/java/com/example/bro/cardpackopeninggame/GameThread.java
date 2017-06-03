@@ -20,6 +20,7 @@ public class GameThread extends Thread {
     private Entity cardPack = null;
     private Entity card = null;
     private Entity bg = null;
+    private Entity btnNextPack;
     private GameTable gameTable = null;
 
     private Rect rectFrame = new Rect();
@@ -29,10 +30,13 @@ public class GameThread extends Thread {
     private double cardPackHeight;
     private boolean isPackTouched = false;
     private ArrayList<Card> _drawnCards;
+    private boolean isAllCardsShowFaces = false;
 
     public GameThread(SurfaceHolder holder, Resources res) {
         this.surfaceHolder = holder;
         this.resource = res;
+        int frameWidth = holder.getSurfaceFrame().width();
+        int frameHeight = holder.getSurfaceFrame().height();
 
         cardPack = new CardPack(res);
         cardPack.setImage(
@@ -40,8 +44,22 @@ public class GameThread extends Thread {
                         res,
                         R.drawable.cardpack
                 ), Color.WHITE));
+
         bg = new Entity(255);
         bg.setImage(res, R.drawable.bg2);
+
+        btnNextPack = new Entity(255);
+        btnNextPack.setSize(frameWidth / 4, frameWidth / 8);
+        btnNextPack.setPosition(
+                ( frameWidth - btnNextPack.getSize().x ) / 2,
+                frameHeight * 3 / 4
+        );
+        btnNextPack.setImage(
+                decodeResource(
+                        res,
+                        R.drawable.btn_done
+                )
+        );
     }
 
     private Bitmap removeColor(Bitmap bitmap, int color) {
@@ -73,7 +91,6 @@ public class GameThread extends Thread {
 
         bg.setPosition(0, 0);
         bg.setSize(width, height);
-
     }
 
     public void on() {
@@ -132,7 +149,6 @@ public class GameThread extends Thread {
                     _card.setCardFace(true);
                 }
             }
-
         }
     }
 }
